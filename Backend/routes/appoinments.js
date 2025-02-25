@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const Appoinments = require("../models/appoinment");
+const Appoinments = require("../models/appoinment"); // Corrected model name
 
 // Test route
-router.get("/test", (req, res) => res.send("A routes working..."));
+router.get("/test", (req, res) => res.send("Appointments routes working..."));
 
 // Create a new appointment
 router.post("/", (req, res) => {
@@ -48,10 +48,10 @@ router.put("/:id", (req, res) => {
 // Delete appointment by ID
 router.delete("/:id", (req, res) => {
     Appoinments.findByIdAndDelete(req.params.id)
-        .then(() => res.json({ msg: "Appoinment deleted successfully" }))
+        .then(() => res.json({ msg: "Appointment deleted successfully" }))
         .catch((error) => {
             console.error(error);
-            res.status(400).json({ msg: "Failed to delete appoinment...", error: error.message });
+            res.status(400).json({ msg: "Failed to delete appointment...", error: error.message });
         });
 });
 

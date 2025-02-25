@@ -1,16 +1,16 @@
 const mongoose = require('mongoose');
 
-const dburl = "mongodb+srv://vehicleservice:Kavindu18192@cluster0.bvfp2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-
-mongoose.set("strictQuery", true,"useNewUrlParser", true);
-
-const connection =async()=>{
-    try{
-        await mongoose.connect(dburl);
+const connection = async () => {
+    try {
+        await mongoose.connect(process.env.MONGO_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
         console.log("Connected to MongoDB");
-    }catch(e){
+    } catch (e) {
         console.error(e.message);
-        process.exit();
+        process.exit(1);
     }
 };
+
 module.exports = connection;

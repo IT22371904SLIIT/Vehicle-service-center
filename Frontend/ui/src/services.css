@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap');
+
+.font-montserrat {
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Ensures the dropdown remains visible */
+.group:hover .absolute {
+  display: flex !important;
+  pointer-events: auto;
+}
+
+/* Styling for dropdown */
+.absolute {
+  z-index: 50;
+}

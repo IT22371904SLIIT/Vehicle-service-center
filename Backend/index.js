@@ -1,52 +1,65 @@
+// Importing Required Modules
 const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
-const vehicleRoutes = require("./routes/vehicles");
-const appoinmentRoutes = require("./routes/appoinments");
-const storeRoutes = require("./routes/stores");
-const emergencyRoutes = require("./routes/emergencies");
-const authRoutes = require("./routes/authroutes");
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const dotenv = require("dotenv");
-const rateLimit = require("express-rate-limit");
+const dotenv = require('dotenv');
+const rateLimit = require('express-rate-limit');
+const path = require('path'); // ✅ Import 'path' module
+
+// Import routers
+const authRouter = require('./routes/authroutes');
+const appointmentRouter = require('./routes/appointments');
+const storeRouter = require('./routes/stores');
+const emergencyRouter = require('./routes/emergencies');
+const vehicleRouter = require('./routes/vehicles');
 
 dotenv.config();
 
+// ✅ Initialize 'app' before using it
 const app = express();
-app.use(cors({ origin: true, credentials: true }));
+
+// Middleware
+app.use(cors());
+app.use(helmet());
+app.use(cookieParser());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-const dbConnection = async () => {
-    try {
-        await mongoose.connect(process.env.MONGO_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
-        console.log("MongoDB connected successfully");
-    } catch (error) {
-        console.error("MongoDB connection failed:", error.message);
-        process.exit(1);
-    }
-};
-
-dbConnection();
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
+// Rate Limiting
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100 // limit each IP to 100 requests per windowMs
 });
 app.use(limiter);
 
-app.get("/", (req, res) => res.send("Hello, server is running..."));
-app.use("/api/vehicles", vehicleRoutes);
-app.use("/api/appoinments", appoinmentRoutes);
-app.use("/api/stores", storeRoutes);
-app.use("/api/emergencies", emergencyRoutes);
-app.use("/api/auth", authRoutes);
+// Database Connection
+mongoose.connect(process.env.MONGO_URI).then(() => {
+    console.log("Database Connected");
+}).catch(err => {
+    console.log(err);
+});
 
+// ✅ Now, use `app.get()` after defining `app`
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+// Routes
+app.use('/api/auth', authRouter);
+app.use('/api/appointments', appointmentRouter);
+app.use('/api/stores', storeRouter);
+app.use('/api/emergencies', emergencyRouter);
+app.use('/api/vehicles', vehicleRouter);
+
+// Test Route
+app.get('/api/v1/test', (req, res) => {
+    res.json({ message: "Hello, from server" });
+});
+
+// Start Server
 const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}...`);
+});

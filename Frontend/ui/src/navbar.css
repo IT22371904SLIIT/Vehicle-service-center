@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap');
+
+.font-montserrat {
+  font-family: 'Montserrat', sans-serif;
+}
+
+nav {
+  position: fixed; /* Keeps the navbar fixed at the top */
+  top: 0;
+  width: 100%; /* Ensures the navbar spans the full width */
+  z-index: 1000; /* Ensures the navbar stays above other content */
+}
+
+.group:hover .group-hover\:block {
+  display: block;
+}
+
+/* Remove unwanted borders or background from nav links */
+.nav-link {
+  border: none !important;
+  background: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Ensure dropdown is properly displayed */
+.group:hover .dropdown-menu {
+  display: block;
+}

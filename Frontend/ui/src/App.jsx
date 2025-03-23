@@ -10,6 +10,9 @@ import Signin from "./Signin";
 import axios from "axios";
 import Userdashboard from "./Userdashboard";
 import AdminDashboard from "./AdminDashboard";
+import Appointment from "./Appointment";
+
+
 
 const App = () => {
   const [showServices, setShowServices] = useState(false);
@@ -62,6 +65,7 @@ const App = () => {
             <Route path='/signin' element={<Signin />} />
             <Route path="/user-dashboard" element={<Userdashboard />} />
             <Route path='/admin-dashboard' element={<AdminDashboard/>} />
+            <Route path="/appointment" element={<Appointment />} />
           </Routes>
         </div>
 

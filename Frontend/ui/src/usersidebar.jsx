@@ -8,10 +8,10 @@ const Usidebar = () => {
       </div>
       <div className="flex-grow">
         <nav className="mt-10">
-          <a href="#" className="flex items-center py-2 px-8 bg-gray-800 text-gray-300 hover:bg-red-500 hover:text-white transition-colors duration-200">
+          <a href="/user-dashboard" className="flex items-center py-2 px-8 bg-gray-800 text-gray-300 hover:bg-red-500 hover:text-white transition-colors duration-200">
             <span className="mx-4">Dashboard</span>
           </a>
-          <a href="#" className="flex items-center py-2 px-8 text-gray-300 hover:bg-red-500 hover:text-white transition-colors duration-200">
+          <a href="/appointment" className="flex items-center py-2 px-8 text-gray-300 hover:bg-red-500 hover:text-white transition-colors duration-200">
             <span className="mx-4">Appointments</span>
           </a>
           <a href="#" className="flex items-center py-2 px-8 text-gray-300 hover:bg-red-500 hover:text-white transition-colors duration-200">

@@ -6,8 +6,8 @@ const router = express.Router();
 
 router.get('/all-appointments', appointmentController.getAppointments);
 router.get('/single-appointment', appointmentController.getSingleAppointment);
-router.post('/create-appointment', identifierAdmin, appointmentController.createAppointment);
-router.put('/update-appointment', identifierAdmin, appointmentController.updateAppointment);
-router.delete('/delete-appointment', identifierAdmin, appointmentController.deleteAppointment);
+router.post('/create-appointment', identifierUser, appointmentController.createAppointment);
+router.put('/update-appointment', identifierUser, appointmentController.updateAppointment);
+router.delete('/delete-appointment', identifierUser, appointmentController.deleteAppointment);
 
 module.exports = router;

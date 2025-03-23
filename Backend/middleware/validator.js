@@ -40,5 +40,31 @@ exports.createVehicleSchema = Joi.object({
     status: Joi.string().valid("Available", "Booked", "Maintenance").default("Available"),
     imageUrl: Joi.string().uri().trim(),
 });
-
-
+//------------------------ validation for create appoinment --------------------------
+exports.createAppointmentSchema = Joi.object({
+  AID: Joi.string().min(3).max(20).optional().trim(),
+  Aname: Joi.string().min(2).max(50).required().trim(),
+  Aphone: Joi.string()
+    .pattern(/^[0-9]{10}$/)
+    .required()
+    .messages({
+      "string.pattern.base": "Aphone must be a 10-digit number.",
+    }),
+  AregID: Joi.string().min(3).max(20).optional().trim(),
+  Avtype: Joi.string().valid("Car", "Bike", "Truck", "Van").required(),
+  Avnum: Joi.string().min(5).max(20).required().trim(),
+  service: Joi.array().items(Joi.string().min(3).max(50)).min(1).required(),
+  comment: Joi.string().max(500).allow("").trim(),
+  date: Joi.string()
+    .pattern(/^\d{4}-\d{2}-\d{2}$/) 
+    .required()
+    .messages({
+      "string.pattern.base": "Date must be in YYYY-MM-DD format.",
+    }),
+  time: Joi.string()
+    .pattern(/^(0[1-9]|1[0-2]):[0-5][0-9] (AM|PM)$/)
+    .required()
+    .messages({
+      "string.pattern.base": "Time must be in HH:MM AM/PM format.",
+    }),
+});

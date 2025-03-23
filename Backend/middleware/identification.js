@@ -1,34 +1,37 @@
 const jwt = require('jsonwebtoken');
 
-exports.identifierUser = (req, res, next) => {
-    let token;
-
-    if (req.headers.client === 'not-browser') {
-        token = req.headers.authorization;
-    } else {
-        token = req.cookies?.Authorization;
+const extractToken = (req) => {
+    // Check if Authorization header exists and starts with 'Bearer'
+    const authHeader = req.headers['authorization'];
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+        return authHeader.split(' ')[1];  // Extract token after 'Bearer '
     }
+    return null;  // Return null if no token is found
+};
 
+
+const verifyToken = (token) => {
+    if (token.startsWith('Bearer ')) {
+        return token.split(' ')[1];
+    }
+    return token;
+};
+
+const handleUnauthorized = (res, message) => {
+    return res.status(403).json({ success: false, message });
+};
+
+exports.identifierUser = (req, res, next) => {
+    const token = extractToken(req); // Token is already extracted
     if (!token) {
         return res.status(403).json({ success: false, message: "Unauthorized - No token provided" });
     }
 
     try {
-        let userToken;
-        if (token.startsWith('Bearer ')) {
-            userToken = token.split(' ')[1]; 
-        } else {
-            userToken = token;
-        }
-
-        const jwtVerified = jwt.verify(userToken, process.env.TOKEN_SECRET);
-        if (!jwtVerified) {
-            return res.status(401).json({ success: false, message: "Invalid token" });
-        }
-
-        req.User = jwtVerified;
+        // Verify the token using your secret key
+        const jwtVerified = jwt.verify(token, process.env.JWT_SECRET);
+        req.User = jwtVerified; // Store the decoded user info
         next();
-
     } catch (error) {
         console.error("JWT Verification Error:", error.message);
         return res.status(401).json({ success: false, message: "Unauthorized - Invalid or expired token" });
@@ -37,27 +40,16 @@ exports.identifierUser = (req, res, next) => {
 
 
 exports.identifierAdmin = (req, res, next) => {
-    let token;
-
-    if (req.headers.client === 'not-browser') {
-        token = req.headers.authorization;
-    } else {
-        token = req.cookies?.Authorization;
-    }
+    const token = extractToken(req);
 
     if (!token) {
-        return res.status(403).json({ success: false, message: "Unauthorized - No token provided" });
+        return handleUnauthorized(res, "Unauthorized - No token provided");
     }
 
     try {
-        let userToken;
-        if (token.startsWith('Bearer ')) {
-            userToken = token.split(' ')[1]; 
-        } else {
-            userToken = token;
-        }
-
+        const userToken = verifyToken(token);
         const jwtVerified = jwt.verify(userToken, process.env.TOKEN_SECRET);
+
         if (!jwtVerified) {
             return res.status(401).json({ success: false, message: "Invalid token" });
         }
@@ -68,7 +60,6 @@ exports.identifierAdmin = (req, res, next) => {
 
         req.user = jwtVerified;
         next();
-
     } catch (error) {
         console.error("JWT Verification Error:", error.message);
         return res.status(401).json({ success: false, message: "Unauthorized - Invalid or expired token" });

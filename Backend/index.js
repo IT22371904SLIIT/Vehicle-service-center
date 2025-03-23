@@ -20,8 +20,18 @@ dotenv.config();
 // ✅ Initialize 'app' before using it
 const app = express();
 
+
+
+// CORS Configuration
+const corsOptions = {
+  origin: 'http://localhost:5173', // Allow frontend origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed HTTP methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allow Authorization header
+  credentials: true, // Enable credentials if you want to allow cookies
+};
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());
@@ -41,6 +51,12 @@ mongoose.connect(process.env.MONGO_URI).then(() => {
     console.log(err);
 });
 
+app.use((req, res, next) => {
+    console.log('Request Headers:', req.headers);  // To inspect headers
+    next();
+  });
+  
+
 // ✅ Now, use `app.get()` after defining `app`
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
@@ -59,7 +75,7 @@ app.get('/api/v1/test', (req, res) => {
 });
 
 // Start Server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 9000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}...`);
 });

@@ -11,6 +11,7 @@ import axios from "axios";
 import Userdashboard from "./Userdashboard";
 import AdminDashboard from "./AdminDashboard";
 import Appointment from "./Appointment";
+import EmergencyForm from "./EmergencyForm";
 
 
 
@@ -66,6 +67,13 @@ const App = () => {
             <Route path="/user-dashboard" element={<Userdashboard />} />
             <Route path='/admin-dashboard' element={<AdminDashboard/>} />
             <Route path="/appointment" element={<Appointment />} />
+            
+            {/* Emergency */}
+            <Route path="/emergencyform" element={<EmergencyForm />} />
+            <Route path="/emergencylist" element={<EmergencyList />} />
+            <Route path="/emergencyform" element={<EmergencyForm />} />
+            <Route path="/emergencyform" element={<EmergencyForm />} />
+
           </Routes>
         </div>
 
